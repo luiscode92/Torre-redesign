@@ -14,6 +14,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Rating from "@material-ui/lab/Rating";
 import Container from "@material-ui/core/Container";
+import { getDisplayDate } from "@material-ui/pickers/_helpers/text-field-helper";
 //import PeopleDialog from "./PeopleDialog";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,6 +22,23 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     height: "100px",
   },
+
+  heroContent: {
+    backgroundColor: '#383B40',
+    padding: theme.spacing(8, 0, 6),
+    height: '100vh',
+    
+},
+
+  paper: {
+    padding: '2px 4px',
+        display: 'flex',
+        alignItems: 'center',
+        width: 400,
+        
+        backgroundColor : '#383B40'
+  },
+
   header: {
     display: "flex",
     position: "absolute",
@@ -79,47 +97,26 @@ export function SummaryCard({ title, value, component }) {
 
 export default function Profile() {
   const classes = useStyles()
-  const [appState, setAppState] = useState({
-    profileData: null,
-    loading: true
-  });
-  
+
+  const [profile, setProfile] = useState({})
+
+
   useEffect(() => {
-    setAppState({ loading: true });
-    const apiUrl = `/api/bios/luisenriquesanjuanmelo`;
-    axios.get(apiUrl).then((response) => {
-      const pdata = response.data;
-      setAppState({loading: false, profileData: pdata });
-      //console.log(pdata);
-    });
-  }, [setAppState]);
-
-
- 
-
-  if (appState.loading){
-    console.log('loading...')
+    getData()
+  }, [])
+  const getData = async () => {
+    const data = await fetch('/api/bios/luisenriquesanjuanmelo')
+    const profile = await data.json()
+    console.log(profile)
+    setProfile(profile)
   }
 
-  console.log(appState.profileData.person.name);
   return (
-    <Container>
-      <Paper>
-      <div
-        style={{
-          height: "200px",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          filter: "contrast(75%)",
-          backgroundImage: "url(/img/wallpaper.jpeg)",
-        }}
-      />
-    
-      </Paper>
-     {/* <div className={classes.headerContainer}>
+    <Container className={classes.heroContent}>
+     <div className={classes.headerContainer}>
         <div className={classes.header}>
           
-          <Typography variant={"h5"}>{appState.profileData.name}</Typography>
+          <Typography variant={"h5"}>{JSON.stringify(profile.person.name)}</Typography>
           <Chip variant={"outlined"} icon={<DriveIcon />} label="Driver" />
           <Rating name="read-only" value={4.3} readOnly />
           <div className={classes.spacer} />
@@ -136,7 +133,7 @@ export default function Profile() {
       <div className={classes.summaryCards}>
         <SummaryCard title="Last 30 Days"  />
         <SummaryCard title="By Vehicle"  />
-      </div>*/}
+      </div>
     </Container>
   );
   
