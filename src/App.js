@@ -10,6 +10,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import Search from "./Search/Search";
+import Driver from "./People/Driver"
 
 export default function App() {
   
@@ -29,7 +30,7 @@ export default function App() {
                       <Search/>
                     </Route>
                     <Route path="/profile">
-                      
+                      <Driver/>
                     </Route>
                     <Route path="/jobs">
                       
